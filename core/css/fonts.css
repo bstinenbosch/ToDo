@@ -1,0 +1,23 @@
+/*import fonts*/
+@font-face {
+  font-family: Lato;
+  src: url(../resources/Lato-Regular.ttf);
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: Lato;
+  src: url(../resources/Lato-Light.ttf);
+  font-weight: 300;
+}
+
+@font-face {
+  font-family: Lato;
+  src: url(../resources/Lato-Bold.ttf);
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: FontAwesome;
+  src: url(../resources/fontawesome-webfont.ttf);
+}

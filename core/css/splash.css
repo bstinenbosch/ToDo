@@ -1,0 +1,121 @@
+/*Splash page css*/
+/*Layout*/
+*{margin: 0; padding: 0; border: 0; outline: 0;}
+
+header {
+  height: 50px;
+  background-color: #34495E;
+  top: 0px;
+  width: 100%
+  position: absolute;
+}
+
+/*Styles*/
+/*Header*/
+header #Logo {
+  float: left;
+  color: #FFFFFF;
+  font-family: Lato;
+  font-weight: 700;
+  font-size: 25px;
+  vertical-align: middle;
+  padding: 10px 15px;
+}
+
+header nav {
+  float: right;
+}
+
+header ul {
+  list-style: none;
+  overflow: hidden;
+}
+
+li {
+  float: right;
+}
+
+header nav a {
+  transition: all 0.5s ease;
+  display: block;
+  color: #FFFFFF;
+  text-align: center;
+  text-decoration: none;
+  font-family: Lato;
+  font-size: 20px;
+  font-weight: 400;
+  padding: 12px 15px;
+  text-align: center;
+  height: 100%;
+}
+
+header nav a:hover {
+  color: #3598DC;
+}
+
+/*Content*/
+section {
+  margin: auto;
+  text-align: center;
+}
+
+h1 {
+  font-family: Lato;
+  font-weight: 400;
+  font-size: 60px;
+  color: #000000;
+  padding-top: 10px;
+}
+
+h2 {
+  font-family: Lato;
+  font-weight: 300;
+  font-size: 40px;
+  color: #767676;
+  margin-top: 5px;
+  padding-bottom: 20px;
+}
+
+section a {
+  font-family: Lato;
+  font-weight: 400;
+  font-size: 40px;
+  color: #3598DC;
+  margin-top: 20px;
+  text-decoration: none;
+}
+
+.underlineOnHover {
+  position: relative;
+  text-decoration: none;
+}
+
+.underlineOnHover:hover {
+  position: relative;
+  text-decoration: none;
+}
+
+.underlineOnHover:before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  background-color: #3598DC;
+  visibility: hidden;
+  -webkit-transform: scaleX(0);
+  transform: scaleX(0);
+  -webkit-transition: all 0.3s ease-in-out 0s;
+  transition: all 0.3s ease-in-out 0s;
+}
+
+.underlineOnHover:hover:before {
+  visibility: visible;
+  -webkit-transform: scaleX(1);
+  transform: scaleX(1);
+}
+
+img {
+  padding-bottom: 20px;
+}

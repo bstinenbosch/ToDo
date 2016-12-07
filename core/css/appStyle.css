@@ -1,0 +1,133 @@
+/*global*/
+p, ul, a, h1, h2, h3, h4, h5, h6, li {
+  font-family: Lato;
+  font-size: 400;
+}
+
+.underlineOnHover {
+  position: relative;
+  text-decoration: none;
+}
+
+.underlineOnHover:hover {
+  position: relative;
+  text-decoration: none;
+}
+
+.underlineOnHover:before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  background-color: #000;
+  visibility: hidden;
+  -webkit-transform: scaleX(0);
+  transform: scaleX(0);
+  -webkit-transition: all 0.3s ease-in-out 0s;
+  transition: all 0.3s ease-in-out 0s;
+}
+
+.underlineOnHover:hover:before {
+  visibility: visible;
+  -webkit-transform: scaleX(1);
+  transform: scaleX(1);
+}
+
+/*Left-bar*/
+/*user panel*/
+#user p {
+  font-weight: 700;
+  color: #FFFFFF;
+  font-size: 20px;
+  padding-top: 20px;
+}
+
+#catagories ul {
+  list-style: none;
+}
+
+#catagories li {
+  font-size: 20px;
+  padding-bottom: 15px;
+  color: #767676;
+  transition: all 0.5s ease;
+}
+
+#catagories li:hover {
+  color: #3598DC;
+}
+
+/*Menu bar*/
+#menuBar #Logo {
+  float: left;
+  color: #FFFFFF;
+  font-family: Lato;
+  font-weight: 700;
+  font-size: 25px;
+  vertical-align: middle;
+  padding: 10px 15px;
+}
+
+#menuBar nav {
+  float: right;
+}
+
+#menuBar ul {
+  list-style: none;
+  overflow: hidden;
+}
+
+#menuBar li {
+  float: right;
+  transition: all 0.5s ease;
+  display: block;
+  color: #FFFFFF;
+  text-align: center;
+  text-decoration: none;
+  font-family: FontAwesome;
+  font-size: 20px;
+  font-weight: 400;
+  padding: 12px 15px;
+  text-align: center;
+  height: 100%;
+}
+
+#menuBar li:hover {
+  color: #3598DC;
+}
+
+/*todoList*/
+.todoList header p {
+  padding: 11px 15px;
+  color: #FFF;
+  font-size: 22px;
+}
+
+.todoList nav a {
+  display: inline-block;
+  padding: 13px 10px;
+  color: #FFF;
+  font-family: FontAwesome;
+  font-size: 25px;
+}
+
+.todoList ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+.todoList li {
+  display: block;
+  color: #767676;
+  padding: 8px 16px;
+  font-size: 20px;
+  text-decoration: none;
+}
+
+.todoList li:hover {
+  color: #3598DC;
+}
