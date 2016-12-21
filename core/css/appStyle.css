@@ -131,3 +131,14 @@ p, ul, a, h1, h2, h3, h4, h5, h6, li {
 .todoList li:hover {
   color: #3598DC;
 }
+
+.todoList li:hover:after {
+  float: right;
+  color: #3598DC;
+  font-family: FontAwesome;
+  content: "\f00c";
+}
+
+.itemInfo p {
+  visibility: hidden;
+}
