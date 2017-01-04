@@ -36,5 +36,12 @@ $(document).ready(function(){
       $(this).next().children().css("visibility", "visible");
 
     }
+
   });
+
+  $(".addTodo").click(function() {
+    $(this).parent().parent().parent().find("ul").append('<li>new todo</li>');
+    $(this).parent().parent().parent().find("ul").append('<div class="itemInfo"></div>');
+  });
+
 });
