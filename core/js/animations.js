@@ -44,7 +44,7 @@ $(document).ready(function(){
     $(parent).append('<li class="newTodo">new todo</li>');
     $(parent).append('<div class="itemInfo"></div>');
     var child = $(parent).children('li').last();
-    $(child).animate({height: '24px'}, {duration:2000, queue: true});
+    $(child).animate({height: '24px'}, {duration:500, queue: true});
   });
 
 });
