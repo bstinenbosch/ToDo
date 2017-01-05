@@ -1,6 +1,6 @@
 $(document).ready(function(){
   //animate todo Items drop down
-  $(".todoList > ul > li").click(function(){
+  $(".todoList").on('click', 'li', function(){
     var infoHeight = 50;
     //check if the info bar is already open
     if ($(this).next().height()>10) {
@@ -39,9 +39,12 @@ $(document).ready(function(){
 
   });
 
-  $(".addTodo").click(function() {
-    $(this).parent().parent().parent().find("ul").append('<li>new todo</li>');
-    $(this).parent().parent().parent().find("ul").append('<div class="itemInfo"></div>');
+  $(".todoList").on('click', '.addTodo', function() {
+    var parent = $(this).parent().parent().parent().find("ul");
+    $(parent).append('<li class="newTodo">new todo</li>');
+    $(parent).append('<div class="itemInfo"></div>');
+    var child = $(parent).children('li').last();
+    $(child).animate({height: '24px'}, {duration:2000, queue: true});
   });
 
 });
