@@ -59,6 +59,42 @@ p, ul, a, h1, h2, h3, h4, h5, h6, li {
   color: #3598DC;
 }
 
+#catagories li::before {
+  font-family: FontAwesome;
+  display: inline-block;
+  width: 40px;
+}
+
+#catagories .catList::before {
+  content: "\f03a";
+}
+
+#catagories .catUser::before {
+  content: "\f007";
+}
+
+#catagories .catUsers::before {
+  content: "\f0c0";
+}
+
+#catagories .catBriefcase::before {
+  content: "\f0b1";
+}
+
+#catagories .catStudie::before {
+  content: "\f19d";
+}
+
+#catagories .catShop::before {
+  content: "\f07a";
+}
+
+#catagories .catAdd::before {
+  content: "\f067";
+}
+
+/*Categorie icons*/
+
 /*Menu bar*/
 #menuBar #Logo {
   float: left;
@@ -133,7 +169,7 @@ p, ul, a, h1, h2, h3, h4, h5, h6, li {
 }
 
 .todoList li:hover:after {
-  float: right;
+  float: right: ;ht;
   color: #3598DC;
   font-family: FontAwesome;
   content: "\f00c";
