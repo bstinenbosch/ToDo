@@ -11,10 +11,12 @@ http.createServer(app).listen(port);
 
 var todos = [];
 var nextid = 3;
+var list1 = {id : 1, name : "Personal", todos : []};
 var t1 = { id : "1", message : "Maths homework due", type  : 1, deadline : "12/12/2015"};
 var t2 = { id : "2", message : "English homework due", type : 3, deadline : "20/12/2015"};
-todos.push(t1);
-todos.push(t2);
+list1.todos.push(t1);
+list1.todos.push(t2);
+todos.push(list1);
 
 //clients requests todos
 app.get("/todos", function (req, res) {
