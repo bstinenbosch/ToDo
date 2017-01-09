@@ -12,11 +12,17 @@ http.createServer(app).listen(port);
 var todos = [];
 var nextid = 3;
 var list1 = {id : 1, name : "Personal", todos : []};
+var list2 = {id : 2, name : "Work", todos : []};
 var t1 = { id : "1", message : "Maths homework due", type  : 1, deadline : "12/12/2015", timestamp : "1483944984258"};
 var t2 = { id : "2", message : "English homework due", type : 3, deadline : "20/12/2015", timestamp : "1483944984258"};
+var t3 = { id : "3", message : "implement database", type  : 1, deadline : "12/12/2015", timestamp : "1483944984258"};
+var t4 = { id : "4", message : "integrating adding todo's", type : 3, deadline : "20/12/2015", timestamp : "1483944984258"};
 list1.todos.push(t1);
 list1.todos.push(t2);
+list2.todos.push(t3);
+list2.todos.push(t4);
 todos.push(list1);
+todos.push(list2);
 
 //clients requests todos
 app.get("/todos", function (req, res) {
