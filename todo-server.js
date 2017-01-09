@@ -12,17 +12,19 @@ http.createServer(app).listen(port);
 var todos = [];
 var nextid = 3;
 var list1 = {id : 1, name : "Personal", todos : []};
-var list2 = {id : 2, name : "Work", todos : []};
-var t1 = { id : "1", message : "Maths homework due", type  : 1, deadline : "12/12/2015", timestamp : "1483944984258"};
-var t2 = { id : "2", message : "English homework due", type : 3, deadline : "20/12/2015", timestamp : "1483944984258"};
-var t3 = { id : "3", message : "implement database", type  : 1, deadline : "12/12/2015", timestamp : "1483944984258"};
-var t4 = { id : "4", message : "integrating adding todo's", type : 3, deadline : "20/12/2015", timestamp : "1483944984258"};
+var list2 = {id : 2, name : "Working", todos : []};
+var list3 = {id : 3, name : "Test", todos : []};
+var t1 = { id : "1", message : "Maths homework due", deadline : "12/12/2015", priority : 1, text : ""};
+var t2 = { id : "2", message : "English homework due", deadline : "20/12/2015", priority : 1, text : ""};
+var t3 = { id : "3", message : "implement database", deadline : "12/12/2015", priority : 1, text : ""};
+var t4 = { id : "4", message : "integrating adding todo's", deadline : "20/12/2015", priority : 1, text : ""};
 list1.todos.push(t1);
 list1.todos.push(t2);
 list2.todos.push(t3);
 list2.todos.push(t4);
 todos.push(list1);
 todos.push(list2);
+todos.push(list3);
 
 //clients requests todos
 app.get("/todos", function (req, res) {
@@ -35,15 +37,21 @@ app.get("/addtodo", function (req, res) {
 	var url_parts = url.parse(req.url, true);
 	var query = url_parts.query;
 
-	if(query["message"]!==undefined) {
+	if(query["listID"]!==undefined) {
 		var tx = {
 			id: nextid,
-			message : query["message"],
-			type: query["type"],
-			deadline: query["deadline"]
+			message : "New Item",
+            deadline: "00/00/0000",
+            priority: 5,
+			text: "",
+			listID: query["listID"]
 		};
 		nextid++;
-		todos.push(tx);
+        for (var key in todos) {
+            if (todos[key].id == tx.listID) {
+                todos[key].todos.push(tx);
+			}
+		}
 		console.log("Added " + tx.id);
 		res.end("Todo added successfully");
 	}
@@ -52,7 +60,7 @@ app.get("/addtodo", function (req, res) {
 	}
 });
 
-//add todo to the server
+//remove todo from the server
 app.get("/removetodo", function (req, res) {
 	var url_parts = url.parse(req.url, true);
 	var query = url_parts.query;
@@ -74,7 +82,7 @@ app.get("/removetodo", function (req, res) {
 	}
 });
 
-//add todo to the server
+//update todo
 app.get("/updatetodo", function (req, res) {
 	var url_parts = url.parse(req.url, true);
 	var query = url_parts.query;
