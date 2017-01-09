@@ -120,6 +120,15 @@ function animateItems() {
             $(this).next().children().css("visibility", "visible");
         }
     })
+
+    $(".todoList").on('click', '.addTodo', function() {
+      var parent = $(this).parent().parent().parent().find("ul");
+      $(parent).append('<li class="newTodo">new todo</li>');
+      $(parent).append('<div class="itemInfo"></div>');
+      var child = $(parent).children('li').last();
+      $(child).animate({height: '24px', 'padding': '8px 16px'}, {duration:500, queue: true});
+    });
+
 }
 
 function animateLists() {
