@@ -7,30 +7,7 @@ var todoItems = [];
 function load(){
     //load todo's
     var addTodosToList = function (todos) {
-        //check if the todo items are differen
-        var sameTodos = true;
-        if (todoItems.length == 0) {
-            sameTodos = false;
-        } else {
-            loop: for (var key in todos) {
-                for (var key2 in todos[key].todos) {
-                    var todoItem = todos[key].todos[key2];
-                    var timestamp = 0;
-                    //check if item is loaded
-                    for (var key3 in todoItems) {
-                        if (todoItems[key3].id == todoItem.id) {
-                            timestamp = todoItems[key3].timestamp;
-                        }
-                    }
-                    //check if item is up to date
-                    if (todoItem.timestamp != timestamp) {
-                        sameTodos = false;
-                        break loop;
-                    }
-                }
-            }
-        }
-        if (!sameTodos) {
+        if (!sameTodos(todos)) {
             todoItems = [];
             updateTodos(todos);
             animateItems();
@@ -47,6 +24,37 @@ function load(){
                 console.log("incoming Text " + jqXHR.responseText);
             });
     }, 2000);
+}
+
+/**
+ * Check if the todo items are different
+ * @param todos
+ * @returns {boolean}
+ */
+function sameTodos(todos) {
+    var sameTodos = true;
+    if (todoItems.length == 0) {
+        sameTodos = false;
+    } else {
+        loop: for (var key in todos) {
+            for (var key2 in todos[key].todos) {
+                var todoItem = todos[key].todos[key2];
+                var timestamp = 0;
+                //check if item is loaded
+                for (var key3 in todoItems) {
+                    if (todoItems[key3].id == todoItem.id) {
+                        timestamp = todoItems[key3].timestamp;
+                    }
+                }
+                //check if item is up to date
+                if (todoItem.timestamp != timestamp) {
+                    sameTodos = false;
+                    break loop;
+                }
+            }
+        }
+    }
+    return sameTodos
 }
 
 /**
