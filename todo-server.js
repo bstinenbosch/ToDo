@@ -136,7 +136,7 @@ function loadTodosFromDB(res) {
         var key = 0;
         function loadTodoItems(){
             if (key<todos.length) {
-                var query = "SELECT * FROM `todoitem` WHERE `ToDoListID` = " + todos[key].Id + ";";
+                var query = "SELECT * FROM `todoitem` WHERE `ToDoListID` = " + todos[key].Id + " AND `Completed` IS NULL;";
                 con.query(query, function(err,rows){
                     if(err) throw err;
                     todos[key].todos = rows;

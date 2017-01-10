@@ -121,9 +121,16 @@ function animateItems() {
     $(".todoList li").mouseleave(function(){
         $(this).next().hide();
     });
-    //
+    $(".checkTodo").hover(function(){
+        $(this).show();
+    });
+    $(".checkTodo").mouseleave(function(){
+        $(this).hide();
+    });
+    //finish todo item
     $(".checkTodo").click(function(){
         var itemID = $(this).prev().attr('id');
+        console.log(itemID);
         $.ajax({
             dataType: "json",
             url: "./removetodo",
