@@ -66,6 +66,15 @@ app.get("/addtodo", function (req, res) {
     }
 });
 
+//add todoList to the server
+app.get("/addtodolist", function (req, res) {
+    con.query("INSERT INTO `todolist` (`Id`, `Name`, `CreationDate`, `Owner`, `IsPublic`) VALUES (NULL, 'New List', NULL, NULL, NULL);",function(err,rows){
+        if(err) throw err;
+        console.log("Added todolist to database");
+        res.end("Todo added successfully");
+    });
+});
+
 //remove todo from the server
 app.get("/removetodo", function (req, res) {
     var url_parts = url.parse(req.url, true);

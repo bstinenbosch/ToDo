@@ -168,13 +168,25 @@ p, ul, a, h1, h2, h3, h4, h5, h6, li {
   color: #3598DC;
 }
 
-.todoList li:hover:after {
-  float: right: ;ht;
+/*.todoList li:hover:after {
+  float: right;
   color: #3598DC;
   font-family: FontAwesome;
   content: "\f00c";
-}
+}*/
 
 .itemInfo p {
   visibility: hidden;
+}
+
+.checkTodo {
+  margin-top: -35px;
+  width: 20px;
+  height: 20px;
+  float: right;
+  color: #3598DC;
+  font-size: 30px;
+  font-family: FontAwesome;
+  position: relative;
+  left: -20px;
 }

@@ -1,4 +1,6 @@
 $(document).ready(function(){
+    animateCats();
+    //$( ".catAdd" ).click(function() {$( this ).slideUp();});
     load();
 });
 
@@ -23,15 +25,6 @@ function load(){
             console.log("incoming Text " + jqXHR.responseText);
         });
 }
-
-var addTodosToList = function (todos) {
-    if (!sameTodos(todos)) {
-        clientTodos = todos;
-        updateTodos(todos);
-        animateItems();
-        animateLists();
-    }
-};
 
 /**
  * loading todo's from server and adding them to the screen
@@ -75,7 +68,7 @@ function updateTodos(todos) {
         for (var key2 in todos[key].todos) {
             var todoItem = todos[key].todos[key2];
             //add todo to screen
-            list.innerHTML += "<li id='" + todoItem.Id + "'>" + todoItem.Title + "</li>";
+            list.innerHTML += "<li id='" + todoItem.Id + "'>" + todoItem.Title + "</li><span class='checkTodo' style='display: none;'>&#xf00c;</span>";
             list.innerHTML += "<div class='itemInfo'><p>overdue: " + todoItem.DueDate + "</p><p>priority: " + todoItem.Priority + "</p></div>";
         }
         todolist.appendChild(group);
@@ -86,15 +79,16 @@ function animateItems() {
     //animate todo Items drop down
     $(".todoList > ul > li").click(function(){
         var infoHeight = 50;
+        console.log($(this).next().next().height());
         //check if the info bar is already open
-        if ($(this).next().height()>10) {
-            $(this).next().children().css("visibility", "hidden");
-            if ($(this).next().is(":last-child")) {
-                $(this).next().animate({height: "0px"}, {duration: 500, queue: false, complete: function() {
+        if ($(this).next().next().height()>10) {
+            $(this).next().next().children().css("visibility", "hidden");
+            if ($(this).next().next().is(":last-child")) {
+                $(this).next().next().animate({height: "0px"}, {duration: 500, queue: false, complete: function() {
                     $(this).css({"background-color": "#BEC3C7","border-bottom": "none","height":"0px"});
                 }});
             } else {
-                $(this).next().animate({height: "1px"}, {duration: 500, queue: false, complete: function() {
+                $(this).next().next().animate({height: "1px"}, {duration: 500, queue: false, complete: function() {
                     $(this).css({"background-color": "#BEC3C7","border-bottom": "none","height":"1px"});
                 }});
             }
@@ -115,11 +109,20 @@ function animateItems() {
                 }
             });
             //show this info
-            $(this).next().css({"background-color": "#FFF", "border-bottom": "solid 1px #BEC3C7"});
-            $(this).next().animate({height: infoHeight,}, {duration: 500, queue: false});
-            $(this).next().children().css("visibility", "visible");
+            $(this).next().next().css({"background-color": "#FFF", "border-bottom": "solid 1px #BEC3C7"});
+            $(this).next().next().animate({height: infoHeight,}, {duration: 500, queue: false});
+            $(this).next().next().children().css("visibility", "visible");
         }
     })
+    //animate checkbox
+    $(".todoList li").hover(function(){
+        $(this).next().show();
+    });
+    $(".todoList li").mouseleave(function(){
+        $(this).next().hide();
+    });
+    //
+
 }
 
 function animateLists() {
@@ -131,6 +134,24 @@ function animateLists() {
             url: "./addtodo",
             data: { listID: listID }
         });
+
+        //update todo's
+        $.getJSON("/todos", addTodosToList)
+            .error(function (jqXHR, textStatus, errorThrown) {
+                console.log("error " + textStatus);
+                console.log("incoming Text " + jqXHR.responseText);
+            });
+    })
+}
+
+function animateCats() {
+    //make it possible to add a catagory
+    $( ".catAdd" ).click(function(){
+        $.ajax({
+            dataType: "json",
+            url: "./addtodolist"
+        });
+        console.log("Testing i am here!!!!");
 
         //update todo's
         $.getJSON("/todos", addTodosToList)
