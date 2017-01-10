@@ -122,7 +122,14 @@ function animateItems() {
         $(this).next().hide();
     });
     //
-
+    $(".checkTodo").click(function(){
+        var itemID = $(this).prev().attr('id');
+        $.ajax({
+            dataType: "json",
+            url: "./removetodo",
+            data: { itemID: itemID }
+        });
+    });
 }
 
 function animateLists() {

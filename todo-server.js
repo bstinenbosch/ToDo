@@ -78,18 +78,14 @@ app.get("/addtodolist", function (req, res) {
 //remove todo from the server
 app.get("/removetodo", function (req, res) {
     var url_parts = url.parse(req.url, true);
-    var query = url_parts.query;
+    var urlQuery = url_parts.query;
 
-    if(query["id"]!==undefined) {
-        var id = query["id"];
-        var length = todos.length;
-        for (var i = 0; i<length; i++) {
-            if (todos[i].id==id) {
-                todos.splice(i,1);
-                console.log("todo removed: " + id);
-                break;
-            }
-        }
+    if(urlQuery["itemID"]!==undefined) {
+        var id = urlQuery["itemID"];
+        var query = "UPDATE `todoitem` SET `Completed` = '1' WHERE `todoitem`.`Id` = " + id + ";";
+        con.query(query, function(err,rows){
+            if(err) throw err;
+        });
         res.end("Done");
     }
     else {
