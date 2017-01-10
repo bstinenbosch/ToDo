@@ -21,6 +21,20 @@ con.connect(function(err){
     }
     console.log('Connection established');
 });
+var connectionLive = false;
+
+function closeConnection() {
+    con.end(function (err) {
+        // The connection is terminated gracefully
+        // Ensures all previously enqueued queries are still
+        // before sending a COM_QUIT packet to the MySQL server.
+        if (err) {
+            console.log(err);
+            return;
+        }
+        console.log('Connection closed');
+    });
+}
 
 //setting up the server
 var port = 3000;
@@ -28,27 +42,10 @@ var app = express();
 app.use(express.static(__dirname + ""));
 http.createServer(app).listen(port);
 
-var todos = [];
-/*var nextid = 3;
-var list1 = {id : 1, name : "Personal", todos : []};
-var list2 = {id : 2, name : "Working", todos : []};
-var list3 = {id : 3, name : "Test", todos : []};
-var t1 = { id : "1", message : "Maths homework due", deadline : "12/12/2015", priority : 1, text : ""};
-var t2 = { id : "2", message : "English homework due", deadline : "20/12/2015", priority : 1, text : ""};
-var t3 = { id : "3", message : "implement database", deadline : "12/12/2015", priority : 1, text : ""};
-var t4 = { id : "4", message : "integrating adding todo's", deadline : "20/12/2015", priority : 1, text : ""};
-list1.todos.push(t1);
-list1.todos.push(t2);
-list2.todos.push(t3);
-list2.todos.push(t4);
-todos.push(list1);
-todos.push(list2);
-todos.push(list3);*/
-
 //clients requests todos
 app.get("/todos", function (req, res) {
     console.log("todos requested!");
-    res.json(todos);
+    loadTodosFromDB(res);
 });
 
 //add todo to the server
@@ -57,22 +54,12 @@ app.get("/addtodo", function (req, res) {
     var query = url_parts.query;
 
     if(query["listID"]!==undefined) {
-        var tx = {
-            id: nextid,
-            message : "New Item",
-            deadline: "00/00/0000",
-            priority: 5,
-            text: "",
-            listID: query["listID"]
-        };
-        nextid++;
-        for (var key in todos) {
-            if (todos[key].id == tx.listID) {
-                todos[key].todos.push(tx);
-            }
-        }
-        console.log("Added " + tx.id);
-        res.end("Todo added successfully");
+        var listID = query["listID"];
+        con.query("INSERT INTO `todoitem` (`Id`, `Title`, `Text`, `CreationDate`, `DueDate`, `Completed`, `CompletionDate`, `Priority`, `ToDoListID`, `ParentToDo`) VALUES (NULL, 'new item', NULL, NULL, NULL, NULL, NULL, '1', '" + listID + "', NULL);",function(err,rows){
+            if(err) throw err;
+            console.log("Added todo to database");
+            res.end("Todo added successfully");
+        });
     }
     else {
         res.end("Error: missing message parameter");
@@ -130,43 +117,33 @@ app.get("/updatetodo", function (req, res) {
     }
 });
 
-
-
 //Functions
-function loadTodosFromDB() {
-    con.connect(function(err){
-        if(err){
-            console.log(err);
-            console.log('Error connecting to Db');
-            return;
-        }
-        console.log('Connection established');
-    });
-
-	/*//create item
-    con.query("INSERT INTO `todoitem` (`Id`, `Title`, `Text`, `CreationDate`, `DueDate`, `Completed`, `CompletionDate`, `Priority`, `ToDoListID`, `ParentToDo`) VALUES (NULL, 'new item', NULL, NULL, NULL, NULL, NULL, '1', NULL, NULL);",function(err,rows){
+/**
+ * Load todo's from database and send them back to the client
+ * @param res
+ */
+function loadTodosFromDB(res) {
+    var todos = []
+    con.query("SELECT * FROM `todolist`;",function(err,rows){
         if(err) throw err;
+        todos = rows;
 
-        console.log('Data received from Db:\n');
-        console.log(rows);
-    });
-
-	//create list
-    con.query("INSERT INTO `todolist` (`Id`, `Name`, `CreationDate`, `Owner`, `IsPublic`) VALUES (NULL, 'New List', NULL, NULL, NULL);",function(err,rows){
-        if(err) throw err;
-
-        console.log('Data received from Db:\n');
-        console.log(rows);
-    });*/
-
-    con.end(function(err) {
-        // The connection is terminated gracefully
-        // Ensures all previously enqueued queries are still
-        // before sending a COM_QUIT packet to the MySQL server.
-        if(err){
-            console.log(err);
-            return;
+        var key = 0;
+        function loadTodoItems(){
+            if (key<todos.length) {
+                var query = "SELECT * FROM `todoitem` WHERE `ToDoListID` = " + todos[key].Id + ";";
+                con.query(query, function(err,rows){
+                    if(err) throw err;
+                    todos[key].todos = rows;
+                    ++key;
+                    loadTodoItems();
+                    //console.log(rows);
+                });
+            } else {
+                //return todo's to client
+                res.json(todos);
+            }
         }
-        console.log('Connection closed');
+        loadTodoItems()
     });
 }

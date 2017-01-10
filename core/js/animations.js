@@ -68,15 +68,15 @@ function updateTodos(todos) {
     var todolist = document.getElementById("todo");
     for (var key in todos) {//add all todosLists
         var group = document.createElement("section");
-        group.id = todos[key].id;
+        group.id = todos[key].Id;
         group.className = "todoList";
-        group.innerHTML +=  "<header><p>" + todos[key].name + "</p><nav><a class='addItem'>&#xf067;</a><a>&#xf0c9;</a></nav></header><ul></ul>";
+        group.innerHTML +=  "<header><p>" + todos[key].Name + "</p><nav><a class='addItem'>&#xf067;</a><a>&#xf0c9;</a></nav></header><ul></ul>";
         var list = group.getElementsByTagName("ul")[0];
         for (var key2 in todos[key].todos) {
             var todoItem = todos[key].todos[key2];
             //add todo to screen
-            list.innerHTML += "<li id='" + todoItem.id + "'>" + todoItem.message + "</li>";
-            list.innerHTML += "<div class='itemInfo'><p>overdue: " + todoItem.deadline + "</p><p>priority: " + todoItem.priority + "</p></div>";
+            list.innerHTML += "<li id='" + todoItem.Id + "'>" + todoItem.Title + "</li>";
+            list.innerHTML += "<div class='itemInfo'><p>overdue: " + todoItem.DueDate + "</p><p>priority: " + todoItem.Priority + "</p></div>";
         }
         todolist.appendChild(group);
     }
