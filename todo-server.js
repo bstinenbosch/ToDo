@@ -115,6 +115,29 @@ app.get("/updatetodo", function (req, res) {
     }
 });
 
+//analytics
+app.get("/analytics", function (req, res) {
+    console.log("request analytics");
+    var result = {numberOfTodos:"",numberOfFinishedTodos:"",numberOfLists:""};
+
+    con.query("SELECT COUNT(*) AS data FROM `todoitem`;", function(err,rows){
+        if(err) throw err;
+        var numberOfTodos = rows[0].data;
+        con.query("SELECT COUNT(*) AS data FROM `todoitem` WHERE `Completed` = 1;", function(err,rows){
+            if(err) throw err;
+            var numberOfFinishedTodos = rows[0].data;
+            con.query("SELECT COUNT(*) AS data FROM `todolist`;", function(err,rows){
+                if(err) throw err;
+                var numberOfLists = rows[0].data;
+                result.numberOfTodos = numberOfTodos;
+                result.numberOfFinishedTodos = numberOfFinishedTodos;
+                result.numberOfLists = numberOfLists;
+                res.json(result);
+            });
+        });
+    });
+});
+
 //Functions
 /**
  * Load todo's from database and send them back to the client
