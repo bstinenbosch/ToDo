@@ -151,6 +151,12 @@ function animateItems() {
             url: "./updatetodo",
             data: $(this).serialize()
         });
+        //update
+        $.getJSON("/todos", addTodosToList)
+            .error(function (jqXHR, textStatus, errorThrown) {
+                console.log("error " + textStatus);
+                console.log("incoming Text " + jqXHR.responseText);
+            });
         return false;
     });
 }
