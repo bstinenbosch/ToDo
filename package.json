@@ -1,0 +1,9 @@
+{
+  "name": "todo-app",
+  "version": "0.8.0",
+  "dependencies": {
+    "mysql": "^2.12.0",
+    "node.js": "0.0.0"
+  },
+  "scripts": {"start": "node todo-server.js"}
+}
