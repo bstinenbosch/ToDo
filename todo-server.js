@@ -49,7 +49,7 @@ app.get("/todos", function (req, res) {
 });
 
 //add todo to the server
-app.get("/addtodo", function (req, res) {
+app.get("/a?d?d?t?o?d?o?", function (req, res) {
     var url_parts = url.parse(req.url, true);
     var query = url_parts.query;
 
@@ -67,7 +67,7 @@ app.get("/addtodo", function (req, res) {
 });
 
 //add todoList to the server
-app.get("/addtodolist", function (req, res) {
+app.get("/a?d?d?t?o?d?o?l?i?s?t?", function (req, res) {
     con.query("INSERT INTO `todolist` (`Id`, `Name`, `CreationDate`, `Owner`, `IsPublic`) VALUES (NULL, 'New List', NULL, NULL, NULL);",function(err,rows){
         if(err) throw err;
         console.log("Added todolist to database");
@@ -76,7 +76,7 @@ app.get("/addtodolist", function (req, res) {
 });
 
 //remove todo from the server
-app.get("/removetodo", function (req, res) {
+app.get("/r?e?m?o?v?e?t?o?d?o", function (req, res) {
     var url_parts = url.parse(req.url, true);
     var urlQuery = url_parts.query;
 
@@ -116,7 +116,7 @@ app.get("/updatetodo", function (req, res) {
 });
 
 //analytics
-app.get("/analytics", function (req, res) {
+app.get("/analyt?ics", function (req, res) {
     console.log("request analytics");
     var result = {numberOfTodos:"",numberOfFinishedTodos:"",numberOfLists:""};
 
