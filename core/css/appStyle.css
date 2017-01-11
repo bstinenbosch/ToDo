@@ -1,7 +1,11 @@
 /*global*/
-p, ul, a, h1, h2, h3, h4, h5, h6, li {
+p, ul, a, h1, h2, h3, h4, h5, h6, li{
   font-family: Lato;
-  font-size: 400;
+  font-weight: 400;
+}
+
+input {
+  font-size: 18px;
 }
 
 .underlineOnHover {
@@ -175,7 +179,7 @@ p, ul, a, h1, h2, h3, h4, h5, h6, li {
   content: "\f00c";
 }*/
 
-.itemInfo p {
+.itemInfo{
   visibility: hidden;
 }
 

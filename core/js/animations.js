@@ -69,7 +69,7 @@ function updateTodos(todos) {
             var todoItem = todos[key].todos[key2];
             //add todo to screen
             list.innerHTML += "<li id='" + todoItem.Id + "'>" + todoItem.Title + "</li><span class='checkTodo' style='display: none;'>&#xf00c;</span>";
-            list.innerHTML += "<div class='itemInfo'><p>overdue: " + todoItem.DueDate + "</p><p>priority: " + todoItem.Priority + "</p></div>";
+            list.innerHTML += "<div class='itemInfo'><form class='updateTodo' onsubmit=''><input type='hidden' name='id' value='" + todoItem.Id + "'>Title: <input type='text' name='title' value='" + todoItem.Title + "'><br>Due Date:<input type='text' name='due' value='" + todoItem.DueDate + "'><br>Priority:<input type='text' name='priority' value='" + todoItem.Priority + "'><br><input type='submit' value='Submit'></form></div>";
         }
         todolist.appendChild(group);
     }
@@ -78,7 +78,7 @@ function updateTodos(todos) {
 function animateItems() {
     //animate todo Items drop down
     $(".todoList > ul > li").click(function(){
-        var infoHeight = 50;
+        var infoHeight = 90;
         console.log($(this).next().next().height());
         //check if the info bar is already open
         if ($(this).next().next().height()>10) {
@@ -136,6 +136,22 @@ function animateItems() {
             url: "./removetodo",
             data: { itemID: itemID }
         });
+        //update
+        $.getJSON("/todos", addTodosToList)
+            .error(function (jqXHR, textStatus, errorThrown) {
+                console.log("error " + textStatus);
+                console.log("incoming Text " + jqXHR.responseText);
+            });
+    });
+    //make todo updatable
+    $('form').submit(function(){
+        console.log($(this).serialize());
+        $.ajax({
+            dataType: "json",
+            url: "./updatetodo",
+            data: $(this).serialize()
+        });
+        return false;
     });
 }
 

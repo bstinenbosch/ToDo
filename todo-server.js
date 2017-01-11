@@ -95,27 +95,20 @@ app.get("/removetodo", function (req, res) {
 
 //update todo
 app.get("/updatetodo", function (req, res) {
+    console.log("try update");
     var url_parts = url.parse(req.url, true);
-    var query = url_parts.query;
+    var urlQuery = url_parts.query;
 
-    if(query["id"]!==undefined) {
-        var id = query["id"];
-        var result = "todo not found";
-        var tx = {
-            id: query["id"],
-            message : query["message"],
-            type: query["type"],
-            deadline: query["deadline"]
-        };
-        for (var i = 0; i<todos.length; i++) {
-            if (todos[i].id==id) {
-                todos.splice(i,1,tx);
-                console.log("todo updated: " + id);
-                result = "updated!";
-                break;
-            }
-        }
-        res.end(result);
+    if(urlQuery["id"]!==undefined) {
+        var id = urlQuery["id"];
+        var title = urlQuery["title"];
+        var due = urlQuery["due"];
+        var priority = urlQuery["priority"];
+        var query = "UPDATE `todoitem` SET `Title` = '" + title + "', `DueDate` = '" + due + "', `Priority` = '" + priority + "' WHERE `todoitem`.`Id` = " + id + ";";
+        con.query(query, function(err,rows){
+            if(err) throw err;
+        });
+        res.end("todo updated");
     }
     else {
         res.end("Error: missing id parameter");
