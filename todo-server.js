@@ -41,6 +41,8 @@ var port = 3000;
 var app = express();
 app.use(express.static(__dirname + ""));
 http.createServer(app).listen(port);
+// set the view engine to ejs
+app.set('view engine', 'ejs');
 
 //clients requests todos
 app.get("/todos", function (req, res) {
@@ -116,26 +118,83 @@ app.get("/updatetodo", function (req, res) {
 });
 
 //analytics
-app.get("/analyt?ics", function (req, res) {
+app.get("/:name/analyt*ics", function (req, res) {
     console.log("request analytics");
-    var result = {numberOfTodos:"",numberOfFinishedTodos:"",numberOfLists:""};
-
-    con.query("SELECT COUNT(*) AS data FROM `todoitem`;", function(err,rows){
-        if(err) throw err;
-        var numberOfTodos = rows[0].data;
-        con.query("SELECT COUNT(*) AS data FROM `todoitem` WHERE `Completed` = 1;", function(err,rows){
+    function showAnalytics() {
+        con.query("SELECT COUNT(*) AS data FROM `todoitem`;", function(err,rows){
             if(err) throw err;
-            var numberOfFinishedTodos = rows[0].data;
-            con.query("SELECT COUNT(*) AS data FROM `todolist`;", function(err,rows){
+            var numberOfTodos = rows[0].data;
+            con.query("SELECT COUNT(*) AS data FROM `todoitem` WHERE `Completed` = 1;", function(err,rows){
                 if(err) throw err;
-                var numberOfLists = rows[0].data;
-                result.numberOfTodos = numberOfTodos;
-                result.numberOfFinishedTodos = numberOfFinishedTodos;
-                result.numberOfLists = numberOfLists;
-                res.json(result);
+                var numberOfFinishedTodos = rows[0].data;
+                con.query("SELECT COUNT(*) AS data FROM `todolist`;", function(err,rows){
+                    if(err) throw err;
+                    var numberOfLists = rows[0].data;
+                    res.render("../core/pages/analytics.ejs", {
+                        name: req.params.name,
+                        todoItems: numberOfTodos,
+                        cleared: numberOfFinishedTodos,
+                        lists: numberOfLists
+                    });
+                });
             });
         });
+    }
+    res.cookie("name", req.params.name);
+
+    showAnalytics();
+});
+
+app.get("/analyt*ics", function (req, res) {
+    console.log("request analytics");
+    function showAnalytics() {
+        con.query("SELECT COUNT(*) AS data FROM `todoitem`;", function(err,rows){
+            if(err) throw err;
+            var numberOfTodos = rows[0].data;
+            con.query("SELECT COUNT(*) AS data FROM `todoitem` WHERE `Completed` = 1;", function(err,rows){
+                if(err) throw err;
+                var numberOfFinishedTodos = rows[0].data;
+                con.query("SELECT COUNT(*) AS data FROM `todolist`;", function(err,rows){
+                    if(err) throw err;
+                    var numberOfLists = rows[0].data;
+                    res.render("../core/pages/analytics.ejs", {
+                        name: name,
+                        todoItems: numberOfTodos,
+                        cleared: numberOfFinishedTodos,
+                        lists: numberOfLists
+                    });
+                });
+            });
+        });
+    }
+
+
+    var cookies = parseCookies(req);
+    var name;
+    if (typeof cookies.name == 'undefined') {
+        res.cookie("name", "Anonymous");
+        name = "Anonymous";
+        console.log("here");
+        showAnalytics();
+    } else {
+        name = cookies.name;
+        console.log("heresdfsdfsdf");
+        showAnalytics();
+    }
+});
+
+app.get("/ana", function (req, res) {
+    var cookies = parseCookies(req);
+    console.log(cookies);
+
+    var Bas = "Bas";
+    res.writeHead(200, {
+        'Set-Cookie': 'name='+Bas,
+        'Content-Type': 'text/plain'
     });
+
+    res.end("");
+
 });
 
 //Functions
@@ -167,4 +226,16 @@ function loadTodosFromDB(res) {
         }
         loadTodoItems()
     });
+}
+
+function parseCookies (request) {
+    var list = {},
+        rc = request.headers.cookie;
+
+    rc && rc.split(';').forEach(function( cookie ) {
+        var parts = cookie.split('=');
+        list[parts.shift().trim()] = decodeURI(parts.join('='));
+    });
+
+    return list;
 }
