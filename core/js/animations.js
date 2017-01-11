@@ -1,4 +1,6 @@
 $(document).ready(function(){
+    animateCats();
+    //$( ".catAdd" ).click(function() {$( this ).slideUp();});
     load();
 });
 
@@ -23,15 +25,6 @@ function load(){
             console.log("incoming Text " + jqXHR.responseText);
         });
 }
-
-var addTodosToList = function (todos) {
-    if (!sameTodos(todos)) {
-        clientTodos = todos;
-        updateTodos(todos);
-        animateItems();
-        animateLists();
-    }
-};
 
 /**
  * loading todo's from server and adding them to the screen
@@ -68,15 +61,15 @@ function updateTodos(todos) {
     var todolist = document.getElementById("todo");
     for (var key in todos) {//add all todosLists
         var group = document.createElement("section");
-        group.id = todos[key].id;
+        group.id = todos[key].Id;
         group.className = "todoList";
-        group.innerHTML +=  "<header><p>" + todos[key].name + "</p><nav><a class='addItem'>&#xf067;</a><a>&#xf0c9;</a></nav></header><ul></ul>";
+        group.innerHTML +=  "<header><p>" + todos[key].Name + "</p><nav><a class='addItem'>&#xf067;</a><a>&#xf0c9;</a></nav></header><ul></ul>";
         var list = group.getElementsByTagName("ul")[0];
         for (var key2 in todos[key].todos) {
             var todoItem = todos[key].todos[key2];
             //add todo to screen
-            list.innerHTML += "<li id='" + todoItem.id + "'>" + todoItem.message + "</li>";
-            list.innerHTML += "<div class='itemInfo'><p>overdue: " + todoItem.deadline + "</p><p>priority: " + todoItem.priority + "</p></div>";
+            list.innerHTML += "<li id='" + todoItem.Id + "'>" + todoItem.Title + "</li><span class='checkTodo' style='display: none;'>&#xf00c;</span>";
+            list.innerHTML += "<div class='itemInfo'><form class='updateTodo' onsubmit=''><input type='hidden' name='id' value='" + todoItem.Id + "'>Title: <input type='text' name='title' value='" + todoItem.Title + "'><br>Due Date:<input type='text' name='due' value='" + todoItem.DueDate + "'><br>Priority:<input type='text' name='priority' value='" + todoItem.Priority + "'><br><input type='submit' value='Submit'></form></div>";
         }
         todolist.appendChild(group);
     }
@@ -85,16 +78,17 @@ function updateTodos(todos) {
 function animateItems() {
     //animate todo Items drop down
     $(".todoList > ul > li").click(function(){
-        var infoHeight = 50;
+        var infoHeight = 90;
+        console.log($(this).next().next().height());
         //check if the info bar is already open
-        if ($(this).next().height()>10) {
-            $(this).next().children().css("visibility", "hidden");
-            if ($(this).next().is(":last-child")) {
-                $(this).next().animate({height: "0px"}, {duration: 500, queue: false, complete: function() {
+        if ($(this).next().next().height()>10) {
+            $(this).next().next().children().css("visibility", "hidden");
+            if ($(this).next().next().is(":last-child")) {
+                $(this).next().next().animate({height: "0px"}, {duration: 500, queue: false, complete: function() {
                     $(this).css({"background-color": "#BEC3C7","border-bottom": "none","height":"0px"});
                 }});
             } else {
-                $(this).next().animate({height: "1px"}, {duration: 500, queue: false, complete: function() {
+                $(this).next().next().animate({height: "1px"}, {duration: 500, queue: false, complete: function() {
                     $(this).css({"background-color": "#BEC3C7","border-bottom": "none","height":"1px"});
                 }});
             }
@@ -115,11 +109,56 @@ function animateItems() {
                 }
             });
             //show this info
-            $(this).next().css({"background-color": "#FFF", "border-bottom": "solid 1px #BEC3C7"});
-            $(this).next().animate({height: infoHeight,}, {duration: 500, queue: false});
-            $(this).next().children().css("visibility", "visible");
+            $(this).next().next().css({"background-color": "#FFF", "border-bottom": "solid 1px #BEC3C7"});
+            $(this).next().next().animate({height: infoHeight,}, {duration: 500, queue: false});
+            $(this).next().next().children().css("visibility", "visible");
         }
     })
+    //animate checkbox
+    $(".todoList li").hover(function(){
+        $(this).next().show();
+    });
+    $(".todoList li").mouseleave(function(){
+        $(this).next().hide();
+    });
+    $(".checkTodo").hover(function(){
+        $(this).show();
+    });
+    $(".checkTodo").mouseleave(function(){
+        $(this).hide();
+    });
+    //finish todo item
+    $(".checkTodo").click(function(){
+        var itemID = $(this).prev().attr('id');
+        console.log(itemID);
+        $.ajax({
+            dataType: "json",
+            url: "./removetodo",
+            data: { itemID: itemID }
+        });
+        //update
+        $.getJSON("/todos", addTodosToList)
+            .error(function (jqXHR, textStatus, errorThrown) {
+                console.log("error " + textStatus);
+                console.log("incoming Text " + jqXHR.responseText);
+            });
+    });
+    //make todo updatable
+    $('form').submit(function(){
+        console.log($(this).serialize());
+        $.ajax({
+            dataType: "json",
+            url: "./updatetodo",
+            data: $(this).serialize()
+        });
+        //update
+        $.getJSON("/todos", addTodosToList)
+            .error(function (jqXHR, textStatus, errorThrown) {
+                console.log("error " + textStatus);
+                console.log("incoming Text " + jqXHR.responseText);
+            });
+        return false;
+    });
 }
 
 function animateLists() {
@@ -131,6 +170,24 @@ function animateLists() {
             url: "./addtodo",
             data: { listID: listID }
         });
+
+        //update todo's
+        $.getJSON("/todos", addTodosToList)
+            .error(function (jqXHR, textStatus, errorThrown) {
+                console.log("error " + textStatus);
+                console.log("incoming Text " + jqXHR.responseText);
+            });
+    })
+}
+
+function animateCats() {
+    //make it possible to add a catagory
+    $( ".catAdd" ).click(function(){
+        $.ajax({
+            dataType: "json",
+            url: "./addtodolist"
+        });
+        console.log("Testing i am here!!!!");
 
         //update todo's
         $.getJSON("/todos", addTodosToList)
