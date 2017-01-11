@@ -1,6 +1,8 @@
 $(document).ready(function(){
     var printAnalytics = function (data) {
-        console.log(data);
+        $("#todos").text("The number of todo's: " + data.numberOfTodos);
+        $("#clearedTodos").text("The number of cleared todos's: " + data.numberOfFinishedTodos);
+        $("#lists").text("The number of lists's: " + data.numberOfLists);
     };
 
     setInterval(function () {
